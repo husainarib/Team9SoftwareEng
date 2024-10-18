@@ -197,5 +197,100 @@ describe("Testing Scenarios 1", () => {
       // await page.close();
       // await browser.close()
     }, 70000);
+
+
+    describe('Testing Scenarios 3', ()=> {
+    it('User logs in and upload a PDF resume completly. User quits.', async function(){
+        const browser = await puppeteer.launch({
+            headless: false,
+            slowMo : 10,
+            devtools: false,
+            ignoreHTTPSErrors: true,
+        })
+        const page = await browser.newPage()
+        await page.goto('http://localhost:3000')
+        await page.click('.inline-flex',{clickCount:1})
+        await page.waitForSelector('#identifier-field')
+        await page.type('#identifier-field','admin')
+        // await page.waitForSelector('.cl-formButtonPrimary')
+        // await page.click('.cl-formButtonPrimary')
+        await page.waitForSelector('#password-field')
+        await page.click('#password-field')
+        await page.type('#password-field','admin789#',{delay:110});
+        await page.click('.cl-formButtonPrimary',)
+    
+        await page.waitForSelector('.inline-flex')
+        const dashboardText = await page.$eval('.inline-flex', el => el.textContent);
+        console.log(dashboardText)
+        expect(dashboardText).toContain('Go to Charts');
+        // await page.close(); // User quits
+    
+
+        // await page.close();
+        // await browser.close()
+    }, 70000)
+
+    it('User logs in and upload a PDF resume completly and wait for A.I promot to analyze it. User quits.', async function(){
+        const browser = await puppeteer.launch({
+            headless: false,
+            slowMo : 10,
+            devtools: false,
+            ignoreHTTPSErrors: true,
+        })
+        const page = await browser.newPage()
+        await page.goto('http://localhost:3000')
+        await page.click('.inline-flex',{clickCount:1})
+        await page.waitForSelector('#identifier-field')
+        await page.type('#identifier-field','admin')
+        // await page.waitForSelector('.cl-formButtonPrimary')
+        // await page.click('.cl-formButtonPrimary')
+        await page.waitForSelector('#password-field')
+        await page.click('#password-field')
+        await page.type('#password-field','admin789#',{delay:110});
+        await page.click('.cl-formButtonPrimary',)
+    
+        await page.waitForSelector('.inline-flex')
+        const dashboardText = await page.$eval('.inline-flex', el => el.textContent);
+        console.log(dashboardText)
+        expect(dashboardText).toContain('Go to Charts');
+        // await page.close(); // User quits
+    
+
+        // await page.close();
+        // await browser.close()
+    }, 70000)
+
+    it('User logs in and upload a PDF resume completly and wait for A.I promot to analyze and see respond user quits.', async function(){
+        const browser = await puppeteer.launch({
+            headless: false,
+            slowMo : 10,
+            devtools: false,
+            ignoreHTTPSErrors: true,
+        })
+        const page = await browser.newPage()
+        await page.goto('http://localhost:3000')
+        await page.click('.inline-flex',{clickCount:1})
+        await page.waitForSelector('#identifier-field')
+        await page.type('#identifier-field','admin')
+        // await page.waitForSelector('.cl-formButtonPrimary')
+        // await page.click('.cl-formButtonPrimary')
+        await page.waitForSelector('#password-field')
+        await page.click('#password-field')
+        await page.type('#password-field','admin789#',{delay:110});
+        await page.click('.cl-formButtonPrimary',)
+    
+        await page.waitForSelector('.inline-flex')
+        const dashboardText = await page.$eval('.inline-flex', el => el.textContent);
+        console.log(dashboardText)
+        expect(dashboardText).toContain('Go to Charts');
+        // await page.close(); // User quits
+    
+
+        // await page.close();
+        // await browser.close()
+    }, 70000)
+ 
+})
+
   });
 });
