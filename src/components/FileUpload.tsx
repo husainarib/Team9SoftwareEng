@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 const FileUpload = () => {
   const router = useRouter();
   const [uploading, setUploading] = React.useState(false);
+
   const { mutate, isLoading } = useMutation({
     mutationFn: async ({
       file_key,
@@ -27,6 +28,10 @@ const FileUpload = () => {
       });
       return response.data;
     },
+    onError: (error) => {
+      console.error("Mutation error:", error);
+      toast.error("Failed to create chat. Please try again.");
+    },
   });
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -34,58 +39,86 @@ const FileUpload = () => {
     maxFiles: 1,
     onDrop: async (acceptedFiles) => {
       const file = acceptedFiles[0];
+
+      if (!file) {
+        toast.error("No file selected. Please try again.");
+        return;
+      }
+
       if (file.size > 10 * 1024 * 1024) {
-        // bigger than 10mb!
-        toast.error("File too large");
+        toast.error(
+          "The selected file exceeds the 10MB limit. Please choose a smaller file."
+        );
         return;
       }
 
       try {
         setUploading(true);
         const data = await uploadToS3(file);
-        console.log("meow", data);
+
         if (!data?.file_key || !data.file_name) {
-          toast.error("Something went wrong");
+          toast.error(
+            "An error occurred during upload. Invalid server response."
+          );
           return;
         }
+
         mutate(data, {
           onSuccess: ({ chat_id }) => {
-            toast.success("Chat created!");
+            toast.success("Your PDF has been uploaded and chat is ready!");
             router.push(`/chat/${chat_id}`);
           },
           onError: (err) => {
-            toast.error("Error creating chat");
-            console.error(err);
+            console.error("Chat creation error:", err);
+            toast.error(
+              "Error creating chat. Please check your file and try again."
+            );
           },
         });
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        console.error("Upload error:", error);
+        if (error.response?.status === 403) {
+          toast.error("Permission denied. Please check your credentials.");
+        } else if (error.response?.status === 500) {
+          toast.error("Server error. Please try again later.");
+        } else {
+          toast.error("Something went wrong. Please try again.");
+        }
       } finally {
         setUploading(false);
       }
     },
+    onError: (err) => {
+      console.error("Dropzone error:", err);
+      toast.error("Error processing the file. Please try again.");
+    },
   });
+
   return (
-    <div className="p-2 bg-white rounded-xl">
+    <div className="p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-2xl shadow-lg">
       <div
         {...getRootProps({
           className:
-            "border-dashed border-2 rounded-xl cursor-pointer bg-gray-50 py-8 flex justify-center items-center flex-col",
+            "border-dashed border-4 border-green-400 rounded-2xl cursor-pointer bg-white py-10 flex justify-center items-center flex-col hover:bg-green-50 transition-all duration-200",
         })}
       >
         <input {...getInputProps()} />
         {uploading || isLoading ? (
           <>
-            {/* loading state */}
-            <Loader2 className="h-10 w-10 text-blue-500 animate-spin" />
-            <p className="mt-2 text-sm text-slate-400">
-              Spilling Tea to GPT...
+            <Loader2 className="h-12 w-12 text-green-600 animate-spin" />
+            <p className="mt-3 text-base text-gray-600 font-medium">
+              Uploading your file, please wait...
             </p>
           </>
         ) : (
           <>
-            <Inbox className="w-10 h-10 text-blue-500" />
-            <p className="mt-2 text-sm text-slate-400">Drop PDF Here</p>
+            <Inbox className="w-12 h-12 text-green-500" />
+            <p className="mt-3 text-base text-gray-700 font-semibold">
+              Drag and drop your PDF here, or click to select a file.
+            </p>
+            <p className="text-sm text-gray-500 mt-1">
+              Files must be in PDF format and under 10MB.
+            </p>
           </>
         )}
       </div>
