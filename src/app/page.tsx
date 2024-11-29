@@ -11,6 +11,7 @@ import { chats } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
 export default async function Home() {
+  // Authentication and User related data
   const { userId } = await auth();
   const isAuth = !!userId;
   const isPro = await checkSubscription();
@@ -22,19 +23,19 @@ export default async function Home() {
     }
   }
   return (
-    <div className="w-screen min-h-screen bg-gradient-to-r from-rose-100 to-teal-100">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div className="w-screen min-h-screen bg-green-100 flex flex-col">
+      <div className="flex-grow flex items-center justify-center">
         <div className="flex flex-col items-center text-center">
-          <div className="flex items-center">
-            <h1 className="mr-3 text-5xl font-semibold">Chat with any PDF</h1>
-            <UserButton afterSignOutUrl="/" />
-          </div>
-
-          <div className="flex mt-2">
+          {/* Page Title */}
+          <h1 className="mr-3 text-5xl font-semibold text-teal-900">
+            AI-Powered PDF Analyzer!
+          </h1>
+          {/* User Icon after they update */}
+          <div className="flex mt-4">
             {isAuth && firstChat && (
               <>
                 <Link href={`/chat/${firstChat.id}`}>
-                  <Button>
+                  <Button className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 text-xl">
                     Go to Chats <ArrowRight className="ml-2" />
                   </Button>
                 </Link>
@@ -45,17 +46,18 @@ export default async function Home() {
             )}
           </div>
 
-          <p className="max-w-xl mt-1 text-lg text-slate-600">
-            Join millions of students, researchers and professionals to instantly
-            answer questions and understand research with AI
+          <p className="max-w-xl mt-3 text-lg text-teal-800">
+            Analyze and refine your PDFs effortlessly with our AI-powered tool
+            for students and all!
           </p>
 
-          <div className="w-full mt-4">
+          {/* Log in Button */}
+          <div className="w-full mt-6">
             {isAuth ? (
               <FileUpload />
             ) : (
               <Link href="/sign-in">
-                <Button>
+                <Button className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 text-xl">
                   Login to get Started!
                   <LogIn className="w-4 h-4 ml-2" />
                 </Button>
@@ -64,6 +66,10 @@ export default async function Home() {
           </div>
         </div>
       </div>
+      {/* Footer Section */}
+      <footer className="text-center py-4 mt-auto">
+        <p className="text-sm">Made by Team 9 Software Engineers © {new Date().getFullYear()}</p>
+      </footer>
     </div>
   );
 }
