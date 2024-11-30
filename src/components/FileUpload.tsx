@@ -96,6 +96,30 @@ const FileUpload = () => {
 
   return (
     <div className="p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-2xl shadow-lg">
+      {/* Instruction Section */}
+      <div className="mb-4">
+        <h2 className="text-lg font-bold text-gray-800">
+          Instructions for Uploading Your File
+        </h2>
+        <p className="text-gray-700 mt-2">
+          Please follow these steps before uploading your PDF:
+        </p>
+        <ol className="list-decimal list-inside mt-2 text-gray-700">
+          <li>
+            Create a folder named <code>tmp</code> on your C drive.
+          </li>
+          <li>
+            Place the PDF you want to upload inside the <code>C:\tmp</code>{" "}
+            folder.
+          </li>
+          <li>
+            Use the file selector below to upload the PDF from the{" "}
+            <code>tmp</code> folder.
+          </li>
+        </ol>
+      </div>
+
+      {/* Dropzone Section */}
       <div
         {...getRootProps({
           className:

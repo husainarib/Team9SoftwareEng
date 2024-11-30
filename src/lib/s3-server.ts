@@ -38,5 +38,3 @@ export async function downloadFromS3(file_key: string): Promise<string> {
     }
   });
 }
-
-// downloadFromS3("uploads/1693568801787chongzhisheng_resume.pdf");
