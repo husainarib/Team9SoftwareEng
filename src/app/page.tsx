@@ -4,7 +4,6 @@ import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { ArrowRight, LogIn } from "lucide-react";
 import FileUpload from "@/components/FileUpload";
-import { checkSubscription } from "@/lib/subscription";
 import { db } from "@/lib/db";
 import { chats } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -13,7 +12,6 @@ export default async function Home() {
   // Authentication and User related data
   const { userId } = await auth();
   const isAuth = !!userId;
-  const isPro = await checkSubscription();
   let firstChat;
   if (userId) {
     firstChat = await db.select().from(chats).where(eq(chats.userId, userId));
