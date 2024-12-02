@@ -10,11 +10,12 @@ export const runtime = "edge";
 
 const config = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
-  
 });
 const openai = new OpenAIApi(config);
 
 export async function POST(req: Request) {
+  console.log("Pinecone API Key:", process.env.PINECONE_API_KEY);
+  console.log("Pinecone Environment:", process.env.PINECONE_ENVIRONMENT);
   try {
     const { messages, chatId } = await req.json();
     const _chats = await db.select().from(chats).where(eq(chats.id, chatId));
@@ -71,6 +72,7 @@ export async function POST(req: Request) {
     });
     return new StreamingTextResponse(stream);
   } catch (error) {
-    console.error(error); return NextResponse.json({ error: "An error occurred" }, { status: 500 });
+    console.error(error);
+    return NextResponse.json({ error: "An error occurred" }, { status: 500 });
   }
 }
