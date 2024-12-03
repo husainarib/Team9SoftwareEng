@@ -2,6 +2,7 @@
 
 This is the repository for **Team 9 Software Engineering** project. The goal of the project is to build a platform for managing and analyzing uploaded PDF files using Pinecone and AWS S3, integrated with a Next.js frontend and backend API routes.
 
+[**Visit the live application**](https://aichatpdf.netlify.app/)
 ---
 
 ## Features
