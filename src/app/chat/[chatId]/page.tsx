@@ -28,17 +28,26 @@ const ChatPage = async ({ params: { chatId } }: Props) => {
   }
 
   const currentChat = _chats.find((chat) => chat.id === parseInt(chatId));
+  // Log currentChat for debugging
+  console.log("Current Chat:", currentChat);
 
   return (
     <div className="flex h-screen overflow-hidden">
       <div className="flex w-full h-full overflow-hidden">
         {/* Chat Sidebar */}
-        <div className="flex-[1.5] max-w-xs h-screen overflow-auto">
+        <div className="flex-[1.5] max-w-xs h-screen overflow-auto scrollbar-hide">
           <ChatSideBar chats={_chats} chatId={parseInt(chatId)} />
         </div>
-        {/* PDF Viewer */}
-        <div className="flex-[4] p-4 h-screen overflow-auto">
-          <PDFViewer pdf_url={currentChat?.pdfUrl || ""} />
+        {/* Main Content Area */}
+        <div className="flex-[4] flex flex-col p-4 h-full bg-gradient-to-br from-green-100 to-green-50">
+          <div className="flex items-center justify-between p-4 bg-white shadow rounded-md mb-4">
+            <h1 className="text-lg font-semibold text-gray-800">
+              PDF Viewer: {currentChat?.pdfName || "Untitled"}
+            </h1>
+          </div>
+          <div className="flex-1 bg-white shadow rounded-md overflow-hidden">
+            <PDFViewer pdf_url={currentChat?.pdfUrl || ""} />
+          </div>
         </div>
         {/* Chat Component */}
         <div className="flex-[2.5] border-l-4 border-l-slate-200 h-screen overflow-auto">
